@@ -1,0 +1,1 @@
+/userdata/dev_ws/build/ackermann_msgs/rosidl_generator_py/ackermann_msgs/__init__.py

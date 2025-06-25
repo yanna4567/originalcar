@@ -1,0 +1,23 @@
+[1.982s] Invoking command in '/userdata/dev_ws/build/origincar_bringup': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/tros/humble:/opt/ros/humble /usr/bin/cmake --build /userdata/dev_ws/build/origincar_bringup -- -j8 -l8
+[2.186s] Invoked command in '/userdata/dev_ws/build/origincar_bringup' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/tros/humble:/opt/ros/humble /usr/bin/cmake --build /userdata/dev_ws/build/origincar_bringup -- -j8 -l8
+[2.190s] Invoking command in '/userdata/dev_ws/build/origincar_bringup': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/tros/humble:/opt/ros/humble /usr/bin/cmake --install /userdata/dev_ws/build/origincar_bringup
+[2.242s] -- Install configuration: ""
+[2.243s] -- Up-to-date: /userdata/dev_ws/install/origincar_bringup/share/origincar_bringup/launch
+[2.244s] -- Up-to-date: /userdata/dev_ws/install/origincar_bringup/share/origincar_bringup/launch/usb_websocket_display.launch.py
+[2.245s] -- Execute custom install script
+[2.246s] -- Up-to-date symlink: /userdata/dev_ws/install/origincar_bringup/share/ament_index/resource_index/package_run_dependencies/origincar_bringup
+[2.246s] -- Up-to-date symlink: /userdata/dev_ws/install/origincar_bringup/share/ament_index/resource_index/parent_prefix_path/origincar_bringup
+[2.247s] -- Up-to-date symlink: /userdata/dev_ws/install/origincar_bringup/share/origincar_bringup/environment/ament_prefix_path.sh
+[2.248s] -- Up-to-date symlink: /userdata/dev_ws/install/origincar_bringup/share/origincar_bringup/environment/ament_prefix_path.dsv
+[2.248s] -- Up-to-date symlink: /userdata/dev_ws/install/origincar_bringup/share/origincar_bringup/environment/path.sh
+[2.249s] -- Up-to-date symlink: /userdata/dev_ws/install/origincar_bringup/share/origincar_bringup/environment/path.dsv
+[2.250s] -- Up-to-date symlink: /userdata/dev_ws/install/origincar_bringup/share/origincar_bringup/local_setup.bash
+[2.256s] -- Up-to-date symlink: /userdata/dev_ws/install/origincar_bringup/share/origincar_bringup/local_setup.sh
+[2.257s] -- Up-to-date symlink: /userdata/dev_ws/install/origincar_bringup/share/origincar_bringup/local_setup.zsh
+[2.259s] -- Up-to-date symlink: /userdata/dev_ws/install/origincar_bringup/share/origincar_bringup/local_setup.dsv
+[2.260s] -- Symlinking: /userdata/dev_ws/install/origincar_bringup/share/origincar_bringup/package.dsv
+[2.301s] -- Up-to-date symlink: /userdata/dev_ws/install/origincar_bringup/share/ament_index/resource_index/packages/origincar_bringup
+[2.302s] -- Up-to-date symlink: /userdata/dev_ws/install/origincar_bringup/share/origincar_bringup/cmake/origincar_bringupConfig.cmake
+[2.308s] -- Up-to-date symlink: /userdata/dev_ws/install/origincar_bringup/share/origincar_bringup/cmake/origincar_bringupConfig-version.cmake
+[2.309s] -- Up-to-date symlink: /userdata/dev_ws/install/origincar_bringup/share/origincar_bringup/package.xml
+[2.473s] Invoked command in '/userdata/dev_ws/build/origincar_bringup' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/tros/humble:/opt/ros/humble /usr/bin/cmake --install /userdata/dev_ws/build/origincar_bringup

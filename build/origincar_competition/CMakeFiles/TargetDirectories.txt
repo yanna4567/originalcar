@@ -1,0 +1,10 @@
+/userdata/dev_ws/build/origincar_competition/CMakeFiles/uninstall.dir
+/userdata/dev_ws/build/origincar_competition/CMakeFiles/origincar_competition_uninstall.dir
+/userdata/dev_ws/build/origincar_competition/CMakeFiles/origincar_competition.dir
+/userdata/dev_ws/build/origincar_competition/CMakeFiles/test.dir
+/userdata/dev_ws/build/origincar_competition/CMakeFiles/edit_cache.dir
+/userdata/dev_ws/build/origincar_competition/CMakeFiles/rebuild_cache.dir
+/userdata/dev_ws/build/origincar_competition/CMakeFiles/list_install_components.dir
+/userdata/dev_ws/build/origincar_competition/CMakeFiles/install.dir
+/userdata/dev_ws/build/origincar_competition/CMakeFiles/install/local.dir
+/userdata/dev_ws/build/origincar_competition/CMakeFiles/install/strip.dir

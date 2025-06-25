@@ -1,0 +1,16 @@
+/userdata/dev_ws/install/qr_decoder/lib/qr_decoder/qr_decoder
+/userdata/dev_ws/install/qr_decoder/share/ament_index/resource_index/package_run_dependencies/qr_decoder
+/userdata/dev_ws/install/qr_decoder/share/ament_index/resource_index/parent_prefix_path/qr_decoder
+/userdata/dev_ws/install/qr_decoder/share/qr_decoder/environment/ament_prefix_path.sh
+/userdata/dev_ws/install/qr_decoder/share/qr_decoder/environment/ament_prefix_path.dsv
+/userdata/dev_ws/install/qr_decoder/share/qr_decoder/environment/path.sh
+/userdata/dev_ws/install/qr_decoder/share/qr_decoder/environment/path.dsv
+/userdata/dev_ws/install/qr_decoder/share/qr_decoder/local_setup.bash
+/userdata/dev_ws/install/qr_decoder/share/qr_decoder/local_setup.sh
+/userdata/dev_ws/install/qr_decoder/share/qr_decoder/local_setup.zsh
+/userdata/dev_ws/install/qr_decoder/share/qr_decoder/local_setup.dsv
+/userdata/dev_ws/install/qr_decoder/share/qr_decoder/package.dsv
+/userdata/dev_ws/install/qr_decoder/share/ament_index/resource_index/packages/qr_decoder
+/userdata/dev_ws/install/qr_decoder/share/qr_decoder/cmake/qr_decoderConfig.cmake
+/userdata/dev_ws/install/qr_decoder/share/qr_decoder/cmake/qr_decoderConfig-version.cmake
+/userdata/dev_ws/install/qr_decoder/share/qr_decoder/package.xml

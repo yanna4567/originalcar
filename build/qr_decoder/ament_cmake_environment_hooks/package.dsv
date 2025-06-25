@@ -1,0 +1,4 @@
+source;share/qr_decoder/local_setup.bash
+source;share/qr_decoder/local_setup.dsv
+source;share/qr_decoder/local_setup.sh
+source;share/qr_decoder/local_setup.zsh

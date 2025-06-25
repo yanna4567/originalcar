@@ -1,0 +1,16 @@
+package.xml
+setup.cfg
+setup.py
+../../build/image_upload_analyzer/image_upload_analyzer.egg-info/PKG-INFO
+../../build/image_upload_analyzer/image_upload_analyzer.egg-info/SOURCES.txt
+../../build/image_upload_analyzer/image_upload_analyzer.egg-info/dependency_links.txt
+../../build/image_upload_analyzer/image_upload_analyzer.egg-info/entry_points.txt
+../../build/image_upload_analyzer/image_upload_analyzer.egg-info/requires.txt
+../../build/image_upload_analyzer/image_upload_analyzer.egg-info/top_level.txt
+../../build/image_upload_analyzer/image_upload_analyzer.egg-info/zip-safe
+image_upload_analyzer/__init__.py
+image_upload_analyzer/image_upload_analyzer_node.py
+resource/image_upload_analyzer
+test/test_copyright.py
+test/test_flake8.py
+test/test_pep257.py

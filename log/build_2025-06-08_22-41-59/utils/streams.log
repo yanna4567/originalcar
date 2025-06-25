@@ -1,0 +1,24 @@
+[0.126s] Invoking command in '/userdata/dev_ws/build/utils': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/tros/humble:/opt/ros/humble /usr/bin/cmake --build /userdata/dev_ws/build/utils -- -j8 -l8
+[0.459s] [35m[1mConsolidate compiler generated dependencies of target image_transport_node[0m
+[0.768s] [100%] Built target image_transport_node
+[1.027s] Invoked command in '/userdata/dev_ws/build/utils' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/tros/humble:/opt/ros/humble /usr/bin/cmake --build /userdata/dev_ws/build/utils -- -j8 -l8
+[1.036s] Invoking command in '/userdata/dev_ws/build/utils': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/tros/humble:/opt/ros/humble /usr/bin/cmake --install /userdata/dev_ws/build/utils
+[1.078s] -- Install configuration: ""
+[1.079s] -- Execute custom install script
+[1.085s] -- Up-to-date symlink: /userdata/dev_ws/install/utils/lib/utils/image_transport_node
+[1.088s] -- Up-to-date symlink: /userdata/dev_ws/install/utils/share/ament_index/resource_index/package_run_dependencies/utils
+[1.090s] -- Up-to-date symlink: /userdata/dev_ws/install/utils/share/ament_index/resource_index/parent_prefix_path/utils
+[1.091s] -- Up-to-date symlink: /userdata/dev_ws/install/utils/share/utils/environment/ament_prefix_path.sh
+[1.093s] -- Up-to-date symlink: /userdata/dev_ws/install/utils/share/utils/environment/ament_prefix_path.dsv
+[1.095s] -- Up-to-date symlink: /userdata/dev_ws/install/utils/share/utils/environment/path.sh
+[1.096s] -- Up-to-date symlink: /userdata/dev_ws/install/utils/share/utils/environment/path.dsv
+[1.098s] -- Up-to-date symlink: /userdata/dev_ws/install/utils/share/utils/local_setup.bash
+[1.102s] -- Up-to-date symlink: /userdata/dev_ws/install/utils/share/utils/local_setup.sh
+[1.106s] -- Up-to-date symlink: /userdata/dev_ws/install/utils/share/utils/local_setup.zsh
+[1.110s] -- Up-to-date symlink: /userdata/dev_ws/install/utils/share/utils/local_setup.dsv
+[1.112s] -- Symlinking: /userdata/dev_ws/install/utils/share/utils/package.dsv
+[1.144s] -- Up-to-date symlink: /userdata/dev_ws/install/utils/share/ament_index/resource_index/packages/utils
+[1.148s] -- Up-to-date symlink: /userdata/dev_ws/install/utils/share/utils/cmake/utilsConfig.cmake
+[1.151s] -- Up-to-date symlink: /userdata/dev_ws/install/utils/share/utils/cmake/utilsConfig-version.cmake
+[1.153s] -- Up-to-date symlink: /userdata/dev_ws/install/utils/share/utils/package.xml
+[1.190s] Invoked command in '/userdata/dev_ws/build/utils' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/tros/humble:/opt/ros/humble /usr/bin/cmake --install /userdata/dev_ws/build/utils

@@ -1,0 +1,1 @@
+/userdata/dev_ws/build/origincar_base/rosidl_generator_py/origincar_base/__init__.py

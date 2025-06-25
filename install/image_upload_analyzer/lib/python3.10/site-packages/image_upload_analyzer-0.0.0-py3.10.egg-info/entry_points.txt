@@ -1,0 +1,3 @@
+[console_scripts]
+image_upload_analyzer = image_upload_analyzer.image_upload_analyzer_node:main
+

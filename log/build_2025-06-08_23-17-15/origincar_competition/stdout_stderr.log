@@ -1,0 +1,8 @@
+[ 50%] [32m[1mLinking CXX executable origincar_competition[0m
+/usr/bin/ld: cannot find -lhbmem: No such file or directory
+/usr/bin/ld: cannot find -lion: No such file or directory
+/usr/bin/ld: cannot find -lalog: No such file or directory
+collect2: error: ld returned 1 exit status
+gmake[2]: *** [CMakeFiles/origincar_competition.dir/build.make:254: origincar_competition] Error 1
+gmake[1]: *** [CMakeFiles/Makefile2:137: CMakeFiles/origincar_competition.dir/all] Error 2
+gmake: *** [Makefile:146: all] Error 2
