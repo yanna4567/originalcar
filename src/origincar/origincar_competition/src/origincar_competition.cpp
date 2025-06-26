@@ -2,6 +2,7 @@
 #include <string>
 #include <stdexcept> // For std::stoi exceptions
 #include <cmath>     // For M_PI, sin, std::abs, std::min, std::max
+#include <limits>    // For std::numeric_limits
 
 CompleteControl::CompleteControl() : Node("complete_control_node"),
                                      is_teleoperation_active_(false),
@@ -44,7 +45,7 @@ CompleteControl::CompleteControl() : Node("complete_control_node"),
 
     perception_subscription_ = this->create_subscription<ai_msgs::msg::PerceptionTargets>(
         "origincar_competition", 10, std::bind(&CompleteControl::handleAiMsg, this, std::placeholders::_1));
-    cmd_vel_publisher_ = this->create_publisher<geometry_msgs::msg::Twist>("cmd_vel", 10);
+    cmd_vel_publisher_ = this->create_publisher<geometry_msgs::msg::Twist>("ai_cmd_vel", 10);
     follower_line_publisher_ = this->create_publisher<std_msgs::msg::Int32>("follower_line", 5);
     stop_publisher_ = this->create_publisher<std_msgs::msg::Int32>("stop", 1);
     sign_to_upper_computer_pub_ = this->create_publisher<origincar_msg::msg::Sign>("/sign_switch", 10);
@@ -183,21 +184,93 @@ void CompleteControl::handleAiMsg(const ai_msgs::msg::PerceptionTargets::SharedP
         break;
 
     case RobotBehaviorState::CONE_AVOIDANCE_ACTIVE:
-        // 暂时禁用AI避障功能，保持停止状态
-        target_linear_x = 0.0; target_angular_z = 0.0;
-        RCLCPP_INFO(this->get_logger(), "AI避障功能已禁用");
+        // 恢复AI避障功能
+        if (!cone_rois.empty()) {
+            // 找到最近的锥桶
+            const ai_msgs::msg::Roi* closest_cone = nullptr;
+            float min_distance = std::numeric_limits<float>::max();
+            
+            for (const auto* cone_roi_ptr : cone_rois) {
+                float cone_center_x = cone_roi_ptr->rect.x + cone_roi_ptr->rect.width / 2.0f;
+                float distance_to_center = std::abs(cone_center_x - IMAGE_CENTER_X);
+                
+                if (distance_to_center < min_distance) {
+                    min_distance = distance_to_center;
+                    closest_cone = cone_roi_ptr;
+                }
+            }
+            
+            if (closest_cone != nullptr) {
+                float cone_center_x = closest_cone->rect.x + closest_cone->rect.width / 2.0f;
+                float lateral_offset = cone_center_x - IMAGE_CENTER_X;
+                
+                // 判断锥桶位置并决定避障方向
+                if (std::abs(lateral_offset) < cone_lateral_offset_threshold_) {
+                    // 锥桶在正前方，使用预设偏向
+                    target_angular_z = centered_cone_avoid_turn_bias_ * cone_avoidance_steering_gain_;
+                    last_avoidance_turn_direction_ = (centered_cone_avoid_turn_bias_ > 0) ? 
+                        LastAvoidanceTurnDirection::LEFT : LastAvoidanceTurnDirection::RIGHT;
+                } else if (lateral_offset > 0) {
+                    // 锥桶在右侧，向左避障
+                    target_angular_z = cone_avoidance_steering_gain_;
+                    last_avoidance_turn_direction_ = LastAvoidanceTurnDirection::LEFT;
+                } else {
+                    // 锥桶在左侧，向右避障
+                    target_angular_z = -cone_avoidance_steering_gain_;
+                    last_avoidance_turn_direction_ = LastAvoidanceTurnDirection::RIGHT;
+                }
+                
+                target_linear_x = cone_avoidance_speed_;
+                RCLCPP_INFO(this->get_logger(), "Avoiding cone: offset=%.1f, turn=%.2f", lateral_offset, target_angular_z);
+            }
+        } else {
+            // 没有检测到锥桶，进入搜索状态
+            next_behavior_state = RobotBehaviorState::POST_AVOIDANCE_SEARCH_FORWARD;
+            state_transition_timestamp_ = this->now();
+            RCLCPP_INFO(this->get_logger(), "No cones detected, entering search mode");
+        }
         break;
 
     case RobotBehaviorState::POST_AVOIDANCE_SEARCH_FORWARD:
-        // 暂时禁用AI搜索功能，保持停止状态
-        target_linear_x = 0.0; target_angular_z = 0.0;
-        RCLCPP_INFO(this->get_logger(), "AI搜索功能已禁用");
+        // 恢复AI搜索功能
+        if (this->now() - state_transition_timestamp_ < rclcpp::Duration::from_seconds(post_avoidance_forward_duration_sec_)) {
+            // 向前直线搜索
+            target_linear_x = cone_avoidance_speed_ * 0.8;
+            target_angular_z = 0.0;
+            RCLCPP_DEBUG(this->get_logger(), "Searching forward...");
+        } else {
+            // 搜索时间结束，进入恢复转向状态
+            next_behavior_state = RobotBehaviorState::POST_AVOIDANCE_RECOVERY_TURN;
+            state_transition_timestamp_ = this->now();
+            RCLCPP_INFO(this->get_logger(), "Forward search completed, entering recovery turn");
+        }
         break;
 
     case RobotBehaviorState::POST_AVOIDANCE_RECOVERY_TURN:
-        // 暂时禁用AI恢复功能，保持停止状态
-        target_linear_x = 0.0; target_angular_z = 0.0;
-        RCLCPP_INFO(this->get_logger(), "AI恢复功能已禁用");
+        // 恢复AI恢复功能
+        if (last_avoidance_turn_direction_ == LastAvoidanceTurnDirection::NONE) {
+            // 没有记录避障方向，进行S型摆动搜索
+            double time_since_start = (this->now() - state_transition_timestamp_).seconds();
+            target_angular_z = cone_avoidance_steering_gain_ * std::sin(2.0 * M_PI * search_swing_frequency_ * time_since_start);
+            target_linear_x = cone_avoidance_speed_ * recovery_turn_linear_speed_ratio_;
+            RCLCPP_DEBUG(this->get_logger(), "Swing search: angle=%.2f", target_angular_z);
+        } else {
+            // 根据上次避障方向进行反向恢复转向
+            if (last_avoidance_turn_direction_ == LastAvoidanceTurnDirection::LEFT) {
+                target_angular_z = -cone_avoidance_steering_gain_;  // 向右转
+            } else {
+                target_angular_z = cone_avoidance_steering_gain_;   // 向左转
+            }
+            target_linear_x = cone_avoidance_speed_ * recovery_turn_linear_speed_ratio_;
+            RCLCPP_DEBUG(this->get_logger(), "Recovery turn: direction=%d, angle=%.2f", 
+                        static_cast<int>(last_avoidance_turn_direction_), target_angular_z);
+        }
+        
+        // 检查是否应该返回巡线状态（这里简化处理，实际应该检测到线时返回）
+        if (this->now() - state_transition_timestamp_ > rclcpp::Duration::from_seconds(3.0)) {
+            next_behavior_state = RobotBehaviorState::LINE_FOLLOWING;
+            RCLCPP_INFO(this->get_logger(), "Recovery completed, returning to line following");
+        }
         break;
     }
     current_behavior_state_ = next_behavior_state;

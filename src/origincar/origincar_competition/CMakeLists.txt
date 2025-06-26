@@ -30,12 +30,7 @@ find_package(ai_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(origincar_msg REQUIRED)
 
-# Ìí¼Ó¿âËÑË÷Â·¾¶£¨¹Ø¼üĞŞÕı£©
-link_directories(/usr/hobot/lib)
-
-add_executable(origincar_competition src/origincar_competition.cpp)
-
-# Á´½Ó¿â£¨È·±£ hbmem¡¢ion¡¢alog ÕıÈ·Á´½Ó£©
+# æ·»åŠ åº“ï¼ˆç¡®ä¿ hbmemã€ionã€alog æ­£ç¡®é“¾æ¥ï¼‰ï¼š
 target_link_libraries(origincar_competition
   hbmem
   alog
@@ -45,7 +40,19 @@ target_link_libraries(origincar_competition
   cgr
 )
 
-# Á´½Ó ROS2 ÒÀÀµ¿â
+add_executable(priority_controller src/priority_controller.cpp)
+
+# æ·»åŠ åº“ï¼ˆç¡®ä¿ hbmemã€ionã€alog æ­£ç¡®é“¾æ¥ï¼‰ï¼š
+target_link_libraries(priority_controller
+  hbmem
+  alog
+  bp
+  ltp
+  ici
+  cgr
+)
+
+# æ·»åŠ  ROS2 ä¾èµ–é¡¹ï¼š
 ament_target_dependencies(
   origincar_competition
   rclcpp
@@ -57,19 +64,31 @@ ament_target_dependencies(
   origincar_msg
 )
 
+ament_target_dependencies(
+  priority_controller
+  rclcpp
+  std_msgs
+  geometry_msgs
+)
+
 target_include_directories(origincar_competition PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>)
 
-# °²×° launch ÎÄ¼ş
+# æ·»åŠ  launch æ–‡ä»¶
 install(DIRECTORY
   ${PROJECT_SOURCE_DIR}/launch/
   DESTINATION share/${PROJECT_NAME}/launch
 )
 
-# °²×°¿ÉÖ´ĞĞÎÄ¼ş
+# æ·»åŠ å¯æ‰§è¡Œæ–‡ä»¶
 install(
   TARGETS origincar_competition
+  RUNTIME DESTINATION lib/${PROJECT_NAME}
+)
+
+install(
+  TARGETS priority_controller
   RUNTIME DESTINATION lib/${PROJECT_NAME}
 )
 
