@@ -21,7 +21,7 @@ class ImageUploadAnalyzer(Node):
         self.declare_parameter('region', 'cn-beijing')
         self.declare_parameter('bucket_name', 'asdd')
         self.declare_parameter('object_key', 'target.jpg')
-        self.declare_parameter('ark_api_key', '50ae2215-0fc3-406c-9a82-7f5036997a30')
+        self.declare_parameter('ark_api_key', '346fdfb9-5df4-4e73-97df-74edac473663')
         
         # 创建发布者
         self.result_publisher = self.create_publisher(String, 'image_analysis_result', 10)

@@ -38,8 +38,11 @@ add_executable(origincar_competition src/origincar_competition.cpp)
 # 链接库（确保 hbmem、ion、alog 正确链接）
 target_link_libraries(origincar_competition
   hbmem
-  ion
   alog
+  bp
+  ltp
+  ici
+  cgr
 )
 
 # 链接 ROS2 依赖库
