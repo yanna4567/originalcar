@@ -7,7 +7,7 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 from ament_index_python import get_package_share_directory
 
 def generate_launch_description():
-    # --- ÉùÃ÷ Competition Node (CompleteControl) µÄ²ÎÊı ---
+    # --- ï¿½ï¿½ï¿½ï¿½ Competition Node (CompleteControl) ï¿½Ä²ï¿½ï¿½ï¿½ ---
     launch_args = [
         DeclareLaunchArgument('line_following_speed', default_value='1.15',
                               description='Speed for line following (m/s)'),
@@ -25,28 +25,30 @@ def generate_launch_description():
                               description='Cone lateral offset tolerance for centered critical check (px)'),
         DeclareLaunchArgument('post_avoidance_forward_search_duration', default_value='0.5',
                               description='Duration to search forward after cone avoidance (seconds)'),
-        DeclareLaunchArgument('post_avoidance_recovery_turn_duration', default_value='0.0', # 0.0 ±íÊ¾ÎŞÏŞ»Ö¸´×ªÏò
+        DeclareLaunchArgument('post_avoidance_recovery_turn_duration', default_value='0.0', # 0.0 è¡¨ç¤ºæ— é™æ¢å¤è½¬å‘
                               description='Max duration for recovery turn search (seconds, 0 for indefinite)'),
         DeclareLaunchArgument('recovery_turn_linear_speed_ratio', default_value='0.3',
                               description='Linear speed ratio for recovery turn (relative to line_following_speed)'),
-        DeclareLaunchArgument('search_swing_frequency', default_value='0.3', # ÈÔÈ»ÓÃÓÚµ±last_avoidance_turn_direction_ÎªNONEÊ±µÄSĞÍ°Ú¶¯
+        DeclareLaunchArgument('search_swing_frequency', default_value='0.3', # è™½ç„¶ç°åœ¨ä¸å†ä½¿ç”¨Så‹æ‘†åŠ¨ï¼Œä½†ä¿ç•™å‚æ•°
                               description='Frequency for S-swing search if no specific recovery direction (Hz)'),
+        DeclareLaunchArgument('recovery_turn_duration', default_value='1.0',  # æ–°å¢ï¼šæ¢å¤è½¨è¿¹æŒç»­æ—¶é—´
+                              description='Duration for recovery trajectory execution (seconds)'),
 
-        # Èç¹û usb_websocket_display.launch.py ĞèÒª²ÎÊı:
+        #  usb_websocket_display.launch.py ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½:
         # DeclareLaunchArgument('video_device', default_value='/dev/video0', description='USB camera device'),
     ]
 
-    # --- °üº¬ usb_websocket_display.launch.py ---
+    # --- ï¿½ï¿½ï¿½ï¿½ usb_websocket_display.launch.py ---
     included_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
             os.path.join(get_package_share_directory('origincar_bringup'), 'launch', 'usb_websocket_display.launch.py')
         ]),
-        # launch_arguments={ # Èç¹ûĞèÒª´«µİ²ÎÊı
+        # launch_arguments={ # ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½İ²ï¿½ï¿½ï¿½
         #     'param_in_included_launch': LaunchConfiguration('param_declared_above_for_main_launch'),
         # }.items()
     )
 
-    # --- QrCodeDetection ½Úµã ---
+    # --- QrCodeDetection ï¿½Úµï¿½ ---
     qr_node = Node(
         package="qr_decoder",
         executable="qr_decoder",
@@ -55,7 +57,7 @@ def generate_launch_description():
         arguments=['--ros-args', '--log-level', 'warn'],
     )
 
-    # --- Competition (CompleteControl) ½Úµã ---
+    # --- Competition (CompleteControl) ï¿½Úµï¿½ ---
     competition_node = Node(
         package="origincar_competition",
         executable="origincar_competition",
@@ -74,10 +76,11 @@ def generate_launch_description():
             'post_avoidance_recovery_turn_duration': LaunchConfiguration('post_avoidance_recovery_turn_duration'),
             'recovery_turn_linear_speed_ratio': LaunchConfiguration('recovery_turn_linear_speed_ratio'),
             'search_swing_frequency': LaunchConfiguration('search_swing_frequency'),
+            'recovery_turn_duration': LaunchConfiguration('recovery_turn_duration'),
         }]
     )
 
-    # --- ·µ»Ø LaunchDescription ---
+    # ---  LaunchDescription ---
     return LaunchDescription(launch_args + [
         included_launch,
         qr_node,

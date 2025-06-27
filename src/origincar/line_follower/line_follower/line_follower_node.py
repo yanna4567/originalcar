@@ -130,11 +130,19 @@ class LineFollower(Node):
             self.sign_switch_callback,    # 新增：开关标志回调
             qos_profile=10
         )
+        # 新增：订阅origincar_competition的控制权转移信号
+        self.sub_control_handover = self.create_subscription(
+            Int32,
+            '/control_handover',          # origincar_competition发布的控制权转移话题
+            self.control_handover_callback,  # 控制权转移回调函数
+            qos_profile=10
+        )
         # 创建发布者
         self.pub_cmd_vel = self.create_publisher(Twist, '/cmd_vel', 10)  # 速度控制话题
 
         # 初始化变量
         self.active = False  # 是否激活线跟踪
+        self.cv_has_control = True  # 新增：CV系统是否拥有控制权
         self.last_control_time = self.get_clock().now()  # 上次控制时间
         self.control_hz = self.get_parameter('control_hz').value  # 控制频率
 
@@ -158,6 +166,14 @@ class LineFollower(Node):
             # 当收到3或4时停止机器人
             self.stop_robot()
 
+    def control_handover_callback(self, msg):
+        """处理origincar_competition发布的控制权转移消息"""
+        self.cv_has_control = (msg.data == 0)  # 0表示CV控制，1表示competition控制
+        if not self.cv_has_control:
+            self.get_logger().info("收到控制权转移信号：competition接管控制权，暂停line_follower执行")
+        else:
+            self.get_logger().info("收到控制权转移信号：CV系统接管控制权，恢复line_follower执行")
+
     def set_detector_params(self, speed, gain, mode_desc):
         """设置检测器参数并激活"""
         self.detector.linear_speed = speed
@@ -178,6 +194,10 @@ class LineFollower(Node):
         """处理图像消息"""
         if not self.active:  # 如果不活跃则直接返回
             return
+        
+        # 新增：检查CV系统是否拥有控制权
+        if not self.cv_has_control:
+            return  # 如果CV系统没有控制权，则暂停执行
 
         # 控制频率限制
         current_time = self.get_clock().now()

@@ -32,8 +32,7 @@ const int IMAGE_CENTER_X = IMAGE_WIDTH / 2;
 enum class RobotBehaviorState {
     LINE_FOLLOWING,                 // 巡线状态
     CONE_AVOIDANCE_ACTIVE,          // 正在主动避障状态
-    POST_AVOIDANCE_SEARCH_FORWARD,  // 避障后，向前直线搜索线
-    POST_AVOIDANCE_RECOVERY_TURN,   // 直线搜索失败后，根据上次避障方向进行反向恢复转向搜索
+    POST_AVOIDANCE_RECOVERY_TURN,   // 避障后，执行恢复轨迹（与避障方向相反的转向）
     QR_CODE_WAITING                 // 接收到二维码指令，停车等待遥操作
 };
 
@@ -60,6 +59,7 @@ private:
     void setSpeed(double linear_x, double angular_z);
     void publishFollowerLineState(bool is_following);
     void publishHardStop();
+    void publishControlHandover(bool competition_has_control);
 
     // ROS 参数存储变量
     double line_following_speed_;
@@ -68,12 +68,13 @@ private:
     double cone_detection_y_threshold_;
     double cone_critical_y_threshold_;
     double cone_avoidance_steering_gain_; // 也用作恢复转向和S型摆动的角速度幅度
-    double cone_lateral_offset_threshold_; // 判断锥桶是否在“正前方”区域的阈值
+    double cone_lateral_offset_threshold_; // 判断锥桶是否在"正前方"区域的阈值
     double centered_cone_avoid_turn_bias_; // 正前方锥桶避让偏向：1.0向左, -1.0向右
     double post_avoidance_forward_duration_sec_;
     double post_avoidance_recovery_turn_duration_sec_;
     double recovery_turn_linear_speed_ratio_;
     double search_swing_frequency_; // 用于当last_avoidance_turn_direction_为NONE时的S型摆动
+    double recovery_turn_duration_sec_;  // 新增：恢复轨迹持续时间
 
     // 状态变量
     bool is_teleoperation_active_;
@@ -81,6 +82,8 @@ private:
     RobotBehaviorState current_behavior_state_;
     rclcpp::Time state_transition_timestamp_;
     LastAvoidanceTurnDirection last_avoidance_turn_direction_;
+    bool recovery_completed_;  // 新增：标记恢复轨迹是否完成
+    rclcpp::Time recovery_start_time_;  // 新增：恢复开始时间
 
     // ROS 通信接口
     rclcpp::Subscription<ai_msgs::msg::PerceptionTargets>::SharedPtr perception_subscription_;
@@ -88,6 +91,7 @@ private:
     rclcpp::Publisher<std_msgs::msg::Int32>::SharedPtr follower_line_publisher_;
     rclcpp::Publisher<std_msgs::msg::Int32>::SharedPtr stop_publisher_;
     rclcpp::Publisher<origincar_msg::msg::Sign>::SharedPtr sign_to_upper_computer_pub_;
+    rclcpp::Publisher<std_msgs::msg::Int32>::SharedPtr control_handover_publisher_;
     rclcpp::Subscription<std_msgs::msg::String>::SharedPtr qr_code_raw_sub_;
     rclcpp::Subscription<std_msgs::msg::Int32>::SharedPtr teleop_signal_sub_;
 };
