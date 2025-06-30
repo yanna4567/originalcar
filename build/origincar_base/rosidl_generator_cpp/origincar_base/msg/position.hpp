@@ -7,6 +7,5 @@
 #include "origincar_base/msg/detail/position__struct.hpp"
 #include "origincar_base/msg/detail/position__builder.hpp"
 #include "origincar_base/msg/detail/position__traits.hpp"
-#include "origincar_base/msg/detail/position__type_support.hpp"
 
 #endif  // ORIGINCAR_BASE__MSG__POSITION_HPP_

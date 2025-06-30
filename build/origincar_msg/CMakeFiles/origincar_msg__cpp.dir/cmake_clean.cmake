@@ -4,11 +4,9 @@ file(REMOVE_RECURSE
   "rosidl_generator_cpp/origincar_msg/msg/detail/data__builder.hpp"
   "rosidl_generator_cpp/origincar_msg/msg/detail/data__struct.hpp"
   "rosidl_generator_cpp/origincar_msg/msg/detail/data__traits.hpp"
-  "rosidl_generator_cpp/origincar_msg/msg/detail/data__type_support.hpp"
   "rosidl_generator_cpp/origincar_msg/msg/detail/sign__builder.hpp"
   "rosidl_generator_cpp/origincar_msg/msg/detail/sign__struct.hpp"
   "rosidl_generator_cpp/origincar_msg/msg/detail/sign__traits.hpp"
-  "rosidl_generator_cpp/origincar_msg/msg/detail/sign__type_support.hpp"
   "rosidl_generator_cpp/origincar_msg/msg/sign.hpp"
 )
 

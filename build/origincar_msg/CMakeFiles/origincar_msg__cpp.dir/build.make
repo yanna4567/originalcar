@@ -70,13 +70,10 @@ CMakeFiles/origincar_msg__cpp: rosidl_generator_cpp/origincar_msg/msg/data.hpp
 CMakeFiles/origincar_msg__cpp: rosidl_generator_cpp/origincar_msg/msg/detail/data__builder.hpp
 CMakeFiles/origincar_msg__cpp: rosidl_generator_cpp/origincar_msg/msg/detail/data__struct.hpp
 CMakeFiles/origincar_msg__cpp: rosidl_generator_cpp/origincar_msg/msg/detail/data__traits.hpp
-CMakeFiles/origincar_msg__cpp: rosidl_generator_cpp/origincar_msg/msg/detail/data__type_support.hpp
 CMakeFiles/origincar_msg__cpp: rosidl_generator_cpp/origincar_msg/msg/sign.hpp
 CMakeFiles/origincar_msg__cpp: rosidl_generator_cpp/origincar_msg/msg/detail/sign__builder.hpp
 CMakeFiles/origincar_msg__cpp: rosidl_generator_cpp/origincar_msg/msg/detail/sign__struct.hpp
 CMakeFiles/origincar_msg__cpp: rosidl_generator_cpp/origincar_msg/msg/detail/sign__traits.hpp
-CMakeFiles/origincar_msg__cpp: rosidl_generator_cpp/origincar_msg/msg/detail/sign__type_support.hpp
-CMakeFiles/origincar_msg__cpp: rosidl_generator_cpp/origincar_msg/msg/rosidl_generator_cpp__visibility_control.hpp
 
 rosidl_generator_cpp/origincar_msg/msg/data.hpp: /opt/ros/humble/lib/rosidl_generator_cpp/rosidl_generator_cpp
 rosidl_generator_cpp/origincar_msg/msg/data.hpp: /opt/ros/humble/local/lib/python3.10/dist-packages/rosidl_generator_cpp/__init__.py
@@ -139,9 +136,6 @@ rosidl_generator_cpp/origincar_msg/msg/detail/data__struct.hpp: rosidl_generator
 rosidl_generator_cpp/origincar_msg/msg/detail/data__traits.hpp: rosidl_generator_cpp/origincar_msg/msg/data.hpp
 	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_generator_cpp/origincar_msg/msg/detail/data__traits.hpp
 
-rosidl_generator_cpp/origincar_msg/msg/detail/data__type_support.hpp: rosidl_generator_cpp/origincar_msg/msg/data.hpp
-	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_generator_cpp/origincar_msg/msg/detail/data__type_support.hpp
-
 rosidl_generator_cpp/origincar_msg/msg/sign.hpp: rosidl_generator_cpp/origincar_msg/msg/data.hpp
 	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_generator_cpp/origincar_msg/msg/sign.hpp
 
@@ -154,19 +148,14 @@ rosidl_generator_cpp/origincar_msg/msg/detail/sign__struct.hpp: rosidl_generator
 rosidl_generator_cpp/origincar_msg/msg/detail/sign__traits.hpp: rosidl_generator_cpp/origincar_msg/msg/data.hpp
 	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_generator_cpp/origincar_msg/msg/detail/sign__traits.hpp
 
-rosidl_generator_cpp/origincar_msg/msg/detail/sign__type_support.hpp: rosidl_generator_cpp/origincar_msg/msg/data.hpp
-	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_generator_cpp/origincar_msg/msg/detail/sign__type_support.hpp
-
 origincar_msg__cpp: CMakeFiles/origincar_msg__cpp
 origincar_msg__cpp: rosidl_generator_cpp/origincar_msg/msg/data.hpp
 origincar_msg__cpp: rosidl_generator_cpp/origincar_msg/msg/detail/data__builder.hpp
 origincar_msg__cpp: rosidl_generator_cpp/origincar_msg/msg/detail/data__struct.hpp
 origincar_msg__cpp: rosidl_generator_cpp/origincar_msg/msg/detail/data__traits.hpp
-origincar_msg__cpp: rosidl_generator_cpp/origincar_msg/msg/detail/data__type_support.hpp
 origincar_msg__cpp: rosidl_generator_cpp/origincar_msg/msg/detail/sign__builder.hpp
 origincar_msg__cpp: rosidl_generator_cpp/origincar_msg/msg/detail/sign__struct.hpp
 origincar_msg__cpp: rosidl_generator_cpp/origincar_msg/msg/detail/sign__traits.hpp
-origincar_msg__cpp: rosidl_generator_cpp/origincar_msg/msg/detail/sign__type_support.hpp
 origincar_msg__cpp: rosidl_generator_cpp/origincar_msg/msg/sign.hpp
 origincar_msg__cpp: CMakeFiles/origincar_msg__cpp.dir/build.make
 .PHONY : origincar_msg__cpp

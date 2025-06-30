@@ -13,7 +13,8 @@ def generate_launch_description():
 
     # Declare launch arguments
     launch_args = [
-        DeclareLaunchArgument("dnn_example_config_file", default_value=TextSubstitution(text="config/fcosworkconfig.json")),
+        # DeclareLaunchArgument("dnn_example_config_file", default_value=TextSubstitution(text="config/fcosworkconfig.json")),
+        DeclareLaunchArgument("dnn_example_config_file", default_value=TextSubstitution(text="config/yolov5workconfig.json")),
         DeclareLaunchArgument("dnn_example_dump_render_img", default_value=TextSubstitution(text="0")),
         DeclareLaunchArgument("dnn_example_image_width", default_value=TextSubstitution(text="480")),
         DeclareLaunchArgument("dnn_example_image_height", default_value=TextSubstitution(text="272")),

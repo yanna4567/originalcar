@@ -1,0 +1,3 @@
+[console_scripts]
+li4 = origincar_qr.li4:main
+

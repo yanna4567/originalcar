@@ -2,7 +2,6 @@
 #include <string>
 #include <stdexcept> // For std::stoi exceptions
 #include <cmath>     // For M_PI, sin, std::abs, std::min, std::max
-#include <limits>    // For std::numeric_limits
 
 CompleteControl::CompleteControl() : Node("complete_control_node"),
                                      is_teleoperation_active_(false),
@@ -17,7 +16,7 @@ CompleteControl::CompleteControl() : Node("complete_control_node"),
     this->declare_parameter<double>("cone_detection_y_threshold", 220.0);
     this->declare_parameter<double>("cone_critical_y_threshold", 300.0);
     this->declare_parameter<double>("cone_avoidance_steering_gain", 1.2);
-    this->declare_parameter<double>("cone_lateral_offset_threshold", 40.0); // 用于判断锥桶是否在"正前方"区域
+    this->declare_parameter<double>("cone_lateral_offset_threshold", 40.0); // 用于判断锥桶是否在“正前方”区域
     this->declare_parameter<double>("centered_cone_avoid_turn_bias", 1.0);  // 正前方锥桶默认向左避让 (1.0 for left, -1.0 for right)
     this->declare_parameter<double>("post_avoidance_forward_search_duration", 0.1); // 避障后向前短时直行
     this->declare_parameter<double>("post_avoidance_recovery_turn_duration", 0.0); // 0.0 表示无限恢复转向
@@ -44,8 +43,8 @@ CompleteControl::CompleteControl() : Node("complete_control_node"),
 
 
     perception_subscription_ = this->create_subscription<ai_msgs::msg::PerceptionTargets>(
-        "origincar_competition", 10, std::bind(&CompleteControl::handleAiMsg, this, std::placeholders::_1));
-    cmd_vel_publisher_ = this->create_publisher<geometry_msgs::msg::Twist>("ai_cmd_vel", 10);
+        "/origincar_competition", 10, std::bind(&CompleteControl::handleAiMsg, this, std::placeholders::_1));
+    cmd_vel_publisher_ = this->create_publisher<geometry_msgs::msg::Twist>("cmd_vel", 10);
     follower_line_publisher_ = this->create_publisher<std_msgs::msg::Int32>("follower_line", 5);
     stop_publisher_ = this->create_publisher<std_msgs::msg::Int32>("stop", 1);
     sign_to_upper_computer_pub_ = this->create_publisher<origincar_msg::msg::Sign>("/sign_switch", 10);
@@ -61,7 +60,8 @@ void CompleteControl::qrCodeRawCallback(const std_msgs::msg::String::SharedPtr m
     std::string data_str = msg->data;
     bool valid_qr_command_received = false;
     try {
-        int number = std::stoi(data_str);
+        //int number = std::stoi(data_str);
+        int number = 2;
         if (number >= 1 && number <= 9999) {
             if (number % 2 != 0) {
                 last_qr_code_command_ = QR_CLOCKWISE;
@@ -95,6 +95,9 @@ void CompleteControl::teleopSignalCallback(const std_msgs::msg::Int32::SharedPtr
         is_teleoperation_active_ = true;
     } else if (msg->data == SIG_ENDING_TELEOPERATION) {
         RCLCPP_INFO(this->get_logger(), "Teleoperation ENDED. Attempting to resume LINE_FOLLOWING.");
+        // 进入任务3 默认向右避障
+        line_following_speed_ = 0.6;
+        centered_cone_avoid_turn_bias_ = -1;
         is_teleoperation_active_ = false;
         last_qr_code_command_ = QR_NOTHING;
         current_behavior_state_ = RobotBehaviorState::LINE_FOLLOWING;
@@ -178,105 +181,214 @@ void CompleteControl::handleAiMsg(const ai_msgs::msg::PerceptionTargets::SharedP
         break;
 
     case RobotBehaviorState::LINE_FOLLOWING:
-        // 暂时禁用AI巡线功能，保持停止状态
-        target_linear_x = 0.0; target_angular_z = 0.0;
-        RCLCPP_INFO(this->get_logger(), "AI巡线功能已禁用，使用CV巡线系统");
-        break;
-
-    case RobotBehaviorState::CONE_AVOIDANCE_ACTIVE:
-        // 恢复AI避障功能
-        if (!cone_rois.empty()) {
-            // 找到最近的锥桶
-            const ai_msgs::msg::Roi* closest_cone = nullptr;
-            float min_distance = std::numeric_limits<float>::max();
+        if (is_cone_threat_detected_this_cycle) {
+            // 状态已在上面切换到 CONE_AVOIDANCE_ACTIVE
+        } else if (!line_rois.empty()) 
+        {
+            // std::sort(line_rois.begin(), line_rois.end(), 
+            //     [](const ai_msgs::msg::Roi* a, const ai_msgs::msg::Roi* b) {
+            //                 return a->rect.y_offset < b->rect.y_offset;
+            //     });
             
+            // auto closest_line_it = std::min_element(line_rois.begin(), line_rois.end(),
+            //     [](const ai_msgs::msg::Roi* a, const ai_msgs::msg::Roi* b) { return a->rect.y_offset < b->rect.y_offset;});
+            // const auto& target_line = **closest_line_it;
+            
+            // 更新最后检测到线的情况
+            last_line_detected_time_ = this->now();
+            is_first_line_lost_ = true;
+
+
+            std::sort(line_rois.begin(), line_rois.end(), 
+                [](const ai_msgs::msg::Roi* a, const ai_msgs::msg::Roi* b) {
+                    return a->rect.y_offset < b->rect.y_offset;
+                });
+
+            const ai_msgs::msg::Roi* target_line_ptr = nullptr;
+
+            if(line_rois.size() > 2) {
+                // If more than 2 elements, take the second smallest (index 1)
+                target_line_ptr = line_rois[1];
+            } else if (!line_rois.empty()) {
+                // Otherwise take the smallest element
+                target_line_ptr = line_rois[0];
+            }
+
+            const auto& target_line = *target_line_ptr;
+
+            
+            float line_center_x = static_cast<float>(target_line.rect.x_offset + target_line.rect.width / 2.0f);
+            float line_following_error = line_center_x - IMAGE_CENTER_X;
+
+            last_valid_line_error_ = line_following_error;  // 保存有效误差
+
+            target_linear_x = line_following_speed_;
+            target_angular_z = -line_kp_ * line_following_error;
+            last_avoidance_turn_direction_ = LastAvoidanceTurnDirection::NONE;
+        } else { // 巡线时丢线，开始向前搜索
+            // RCLCPP_WARN(this->get_logger(), "LINE_FOLLOWING -> No line! -> POST_AVOIDANCE_SEARCH_FORWARD.");
+            // next_behavior_state = RobotBehaviorState::POST_AVOIDANCE_SEARCH_FORWARD;
+            // state_transition_timestamp_ = this->now();
+            // last_avoidance_turn_direction_ = LastAvoidanceTurnDirection::NONE;
+
+                 // 丢线处理：使用上次有效线路信息恢复
+                rclcpp::Duration line_lost_duration = this->now() - last_line_detected_time_;
+        
+                if (line_lost_duration.seconds() < 1.0) 
+                { // 1秒内尝试恢复
+                    target_linear_x = 0.6;
+                    target_angular_z = -line_kp_ * last_valid_line_error_;
+                    RCLCPP_WARN(this->get_logger(), "LINE_FOLLOWING -> Using last valid line (error: %.2f)", last_valid_line_error_);
+                } 
+                else 
+                {
+                    RCLCPP_WARN(this->get_logger(), "LINE_FOLLOWING -> No line! -> RECOVERY_TURN.");
+                    next_behavior_state = RobotBehaviorState::LINE_RECOVERY_TURN;
+                    state_transition_timestamp_ = this->now();
+                    
+                    // 根据最后有效误差确定转向方向
+                    if (last_valid_line_error_ > 0) {
+                        last_avoidance_turn_direction_ = LastAvoidanceTurnDirection::LEFT;
+                    } else {
+                        last_avoidance_turn_direction_ = LastAvoidanceTurnDirection::RIGHT;
+                    }
+                }
+        }
+        break;
+    case RobotBehaviorState::LINE_RECOVERY_TURN:
+    if (!line_rois.empty()) {
+        RCLCPP_INFO(this->get_logger(), "Found line during RECOVERY_TURN -> LINE_FOLLOWING.");
+        next_behavior_state = RobotBehaviorState::LINE_FOLLOWING;
+        last_line_detected_time_ = this->now(); // 重置检测时间
+    } else {
+        rclcpp::Duration time_since_recovery_start = this->now() - state_transition_timestamp_;
+        
+        // if (time_since_recovery_start.seconds() > 10.0) {
+        //     RCLCPP_ERROR(this->get_logger(), "RECOVERY_TURN timeout! -> SAFE_STOP");
+        //     next_behavior_state = RobotBehaviorState::SAFE_STOP;
+        // } else {
+            target_linear_x = 0.4;
+            
+            // 根据最后有效线路误差确定转向方向
+            if (last_avoidance_turn_direction_ == LastAvoidanceTurnDirection::LEFT || 
+                last_valid_line_error_ > 0) {
+                target_angular_z = -1.0; // 向右转寻找线路
+                RCLCPP_INFO(this->get_logger(), "LINE_RECOVERY_TURN: Turning RIGHT");
+            } else {
+                target_angular_z = 1.0; // 向左转寻找线路
+                RCLCPP_INFO(this->get_logger(), "LINE_RECOVERY_TURN: Turning LEFT");
+            }
+        // }
+    }
+    break;
+    case RobotBehaviorState::CONE_AVOIDANCE_ACTIVE:
+        if (is_cone_threat_detected_this_cycle && !cone_rois.empty()) {
+            const ai_msgs::msg::Roi* most_threatening_cone = nullptr;
+            float max_cone_height = 0.0f;
             for (const auto* cone_roi_ptr : cone_rois) {
-                float cone_center_x = cone_roi_ptr->rect.x + cone_roi_ptr->rect.width / 2.0f;
-                float distance_to_center = std::abs(cone_center_x - IMAGE_CENTER_X);
-                
-                if (distance_to_center < min_distance) {
-                    min_distance = distance_to_center;
-                    closest_cone = cone_roi_ptr;
+                float current_h = static_cast<float>(cone_roi_ptr->rect.height);
+                if (current_h > max_cone_height) {
+                    max_cone_height = current_h;
+                    most_threatening_cone = cone_roi_ptr;
                 }
             }
-            
-            if (closest_cone != nullptr) {
-                float cone_center_x = closest_cone->rect.x + closest_cone->rect.width / 2.0f;
-                float lateral_offset = cone_center_x - IMAGE_CENTER_X;
-                
-                // 判断锥桶位置并决定避障方向
-                if (std::abs(lateral_offset) < cone_lateral_offset_threshold_) {
-                    // 锥桶在正前方，使用预设偏向
-                    target_angular_z = centered_cone_avoid_turn_bias_ * cone_avoidance_steering_gain_;
-                    last_avoidance_turn_direction_ = (centered_cone_avoid_turn_bias_ > 0) ? 
-                        LastAvoidanceTurnDirection::LEFT : LastAvoidanceTurnDirection::RIGHT;
-                } else if (lateral_offset > 0) {
-                    // 锥桶在右侧，向左避障
-                    target_angular_z = cone_avoidance_steering_gain_;
-                    last_avoidance_turn_direction_ = LastAvoidanceTurnDirection::LEFT;
-                } else {
-                    // 锥桶在左侧，向右避障
+            if(most_threatening_cone){
+                const auto& cone = *most_threatening_cone;
+                float cone_center_x = static_cast<float>(cone.rect.x_offset + cone.rect.width / 2.0f);
+                target_linear_x = cone_avoidance_speed_;
+                if (max_cone_height > cone_critical_y_threshold_) target_linear_x = cone_avoidance_speed_;
+                float lateral_error_to_cone = cone_center_x - IMAGE_CENTER_X;
+
+                if (std::abs(lateral_error_to_cone) < cone_lateral_offset_threshold_) { // 锥桶在正前方区域
+                    target_angular_z = cone_avoidance_steering_gain_ * centered_cone_avoid_turn_bias_;
+                    if (centered_cone_avoid_turn_bias_ >= 0) last_avoidance_turn_direction_ = LastAvoidanceTurnDirection::LEFT;
+                    else last_avoidance_turn_direction_ = LastAvoidanceTurnDirection::RIGHT;
+                    RCLCPP_INFO(this->get_logger(), "CONE_AVOIDANCE: Centered cone. Bias turn: %.1f. LastTurn: %d", centered_cone_avoid_turn_bias_, static_cast<int>(last_avoidance_turn_direction_));
+
+                    if (max_cone_height > cone_critical_y_threshold_) {
+                        target_linear_x = std::min(target_linear_x, 0.05);
+                        target_angular_z = cone_avoidance_steering_gain_ * centered_cone_avoid_turn_bias_ * 1.5; 
+                    }
+                } else if (lateral_error_to_cone < 0) { // 锥桶在图像左侧，车应向右转
                     target_angular_z = -cone_avoidance_steering_gain_;
                     last_avoidance_turn_direction_ = LastAvoidanceTurnDirection::RIGHT;
+                } else { // 锥桶在图像右侧，车应向左转
+                    target_angular_z = cone_avoidance_steering_gain_;
+                    last_avoidance_turn_direction_ = LastAvoidanceTurnDirection::LEFT;
                 }
-                
-                target_linear_x = cone_avoidance_speed_;
-                RCLCPP_INFO(this->get_logger(), "Avoiding cone: offset=%.1f, turn=%.2f", lateral_offset, target_angular_z);
+                RCLCPP_DEBUG(this->get_logger(), "CONE_AVOIDANCE_ACTIVE: H:%.1f, LX:%.2f, AZ:%.2f", max_cone_height, target_linear_x, target_angular_z);
+            } else {
+                 is_cone_threat_detected_this_cycle = false;
+                 target_linear_x = 0.0; target_angular_z = 0.0;
             }
-        } else {
-            // 没有检测到锥桶，进入搜索状态
-            next_behavior_state = RobotBehaviorState::POST_AVOIDANCE_SEARCH_FORWARD;
-            state_transition_timestamp_ = this->now();
-            RCLCPP_INFO(this->get_logger(), "No cones detected, entering search mode");
+        }
+        // 避障结束判断
+        if (!is_cone_threat_detected_this_cycle) {
+            RCLCPP_INFO(this->get_logger(), "Exiting CONE_AVOIDANCE_ACTIVE. Last turn: %d.", static_cast<int>(last_avoidance_turn_direction_));
+            if (!line_rois.empty()) {
+                RCLCPP_INFO(this->get_logger(), "Line DETECTED immediately after avoidance. -> LINE_FOLLOWING.");
+                next_behavior_state = RobotBehaviorState::LINE_FOLLOWING;
+            } else { // 无线，则根据设置决定下一步
+                if (post_avoidance_forward_duration_sec_ > 015) {
+                    next_behavior_state = RobotBehaviorState::POST_AVOIDANCE_SEARCH_FORWARD;
+                    RCLCPP_INFO(this->get_logger(), "-> POST_AVOIDANCE_SEARCH_FORWARD.");
+                } else {
+                    next_behavior_state = RobotBehaviorState::POST_AVOIDANCE_RECOVERY_TURN;
+                    RCLCPP_INFO(this->get_logger(), "-> POST_AVOIDANCE_RECOVERY_TURN (Skipping/short forward search).");
+                }
+                state_transition_timestamp_ = this->now();
+            }
         }
         break;
 
     case RobotBehaviorState::POST_AVOIDANCE_SEARCH_FORWARD:
-        // 恢复AI搜索功能
-        if (this->now() - state_transition_timestamp_ < rclcpp::Duration::from_seconds(post_avoidance_forward_duration_sec_)) {
-            // 向前直线搜索
-            target_linear_x = cone_avoidance_speed_ * 0.8;
-            target_angular_z = 0.0;
-            RCLCPP_DEBUG(this->get_logger(), "Searching forward...");
+        if (!line_rois.empty()) {
+            RCLCPP_INFO(this->get_logger(), "Found line during FORWARD search -> LINE_FOLLOWING.");
+            next_behavior_state = RobotBehaviorState::LINE_FOLLOWING;
         } else {
-            // 搜索时间结束，进入恢复转向状态
-            next_behavior_state = RobotBehaviorState::POST_AVOIDANCE_RECOVERY_TURN;
-            state_transition_timestamp_ = this->now();
-            RCLCPP_INFO(this->get_logger(), "Forward search completed, entering recovery turn");
+            rclcpp::Duration time_since_search_start = this->now() - state_transition_timestamp_;
+            if (time_since_search_start.seconds() < post_avoidance_forward_duration_sec_) {
+                target_linear_x = line_following_speed_ * recovery_turn_linear_speed_ratio_;
+                target_angular_z = 0.0; // 直行
+                RCLCPP_INFO(this->get_logger(), "State: POST_AVOIDANCE_SEARCH_FORWARD (%.1fs / %.1fs). LX:%.2f", time_since_search_start.seconds(), post_avoidance_forward_duration_sec_, target_linear_x);
+            } else { // 超时
+                RCLCPP_INFO(this->get_logger(), "FORWARD search timeout -> POST_AVOIDANCE_RECOVERY_TURN.");
+                next_behavior_state = RobotBehaviorState::POST_AVOIDANCE_RECOVERY_TURN;
+                state_transition_timestamp_ = this->now();
+            }
         }
         break;
 
     case RobotBehaviorState::POST_AVOIDANCE_RECOVERY_TURN:
-        // 恢复AI恢复功能
-        if (last_avoidance_turn_direction_ == LastAvoidanceTurnDirection::NONE) {
-            // 没有记录避障方向，进行S型摆动搜索
-            double time_since_start = (this->now() - state_transition_timestamp_).seconds();
-            target_angular_z = cone_avoidance_steering_gain_ * std::sin(2.0 * M_PI * search_swing_frequency_ * time_since_start);
-            target_linear_x = cone_avoidance_speed_ * recovery_turn_linear_speed_ratio_;
-            RCLCPP_DEBUG(this->get_logger(), "Swing search: angle=%.2f", target_angular_z);
-        } else {
-            // 根据上次避障方向进行反向恢复转向
-            if (last_avoidance_turn_direction_ == LastAvoidanceTurnDirection::LEFT) {
-                target_angular_z = -cone_avoidance_steering_gain_;  // 向右转
-            } else {
-                target_angular_z = cone_avoidance_steering_gain_;   // 向左转
-            }
-            target_linear_x = cone_avoidance_speed_ * recovery_turn_linear_speed_ratio_;
-            RCLCPP_DEBUG(this->get_logger(), "Recovery turn: direction=%d, angle=%.2f", 
-                        static_cast<int>(last_avoidance_turn_direction_), target_angular_z);
-        }
-        
-        // 检查是否应该返回巡线状态（这里简化处理，实际应该检测到线时返回）
-        if (this->now() - state_transition_timestamp_ > rclcpp::Duration::from_seconds(3.0)) {
+        if (!line_rois.empty()) {
+            RCLCPP_INFO(this->get_logger(), "Found line during RECOVERY_TURN -> LINE_FOLLOWING.");
             next_behavior_state = RobotBehaviorState::LINE_FOLLOWING;
-            RCLCPP_INFO(this->get_logger(), "Recovery completed, returning to line following");
+        } else {
+            rclcpp::Duration time_since_recovery_start = this->now() - state_transition_timestamp_;
+            if (post_avoidance_recovery_turn_duration_sec_ > 0.0 && time_since_recovery_start.seconds() > post_avoidance_recovery_turn_duration_sec_) {
+                RCLCPP_WARN(this->get_logger(), "RECOVERY_TURN timeout (%.1fs). LastTurn: %d. -> POST_AVOIDANCE_SEARCH_FORWARD (retry).", post_avoidance_recovery_turn_duration_sec_, static_cast<int>(last_avoidance_turn_direction_));
+                next_behavior_state = RobotBehaviorState::POST_AVOIDANCE_SEARCH_FORWARD;
+                state_transition_timestamp_ = this->now();
+                last_avoidance_turn_direction_ = LastAvoidanceTurnDirection::NONE;
+            } else {
+                target_linear_x = 0.6;
+                if (last_avoidance_turn_direction_ == LastAvoidanceTurnDirection::LEFT) { // 上次车向左转避障 (意味着向右恢复)
+                    target_angular_z = -1.25; // 车向右转
+                    RCLCPP_INFO(this->get_logger(), "State: RECOVERY_TURN (Last avoid LEFT, now turning RIGHT). AZ: %.2f", target_angular_z);
+                } else if (last_avoidance_turn_direction_ == LastAvoidanceTurnDirection::RIGHT) { // 上次车向右转避障 (意味着向左恢复)
+                    target_angular_z = 1.25;  // 车向左转
+                    RCLCPP_INFO(this->get_logger(), "State: RECOVERY_TURN (Last avoid RIGHT, now turning LEFT). AZ: %.2f", target_angular_z);
+                } else { // 无明确上次转向，执行S型摆动
+                    target_angular_z = 1.0;  // 车向左转
+                    RCLCPP_INFO(this->get_logger(), "State: RECOVERY_TURN (Last avoid RIGHT, now turning LEFT). AZ: %.2f", target_angular_z);
+                }
+            }
         }
         break;
     }
     current_behavior_state_ = next_behavior_state;
 
-    // 暂时禁用AI巡线状态发布，只发布停止状态
-    publishFollowerLineState(false);
+    publishFollowerLineState(current_behavior_state_ == RobotBehaviorState::LINE_FOLLOWING);
     setSpeed(target_linear_x, target_angular_z);
 }
 

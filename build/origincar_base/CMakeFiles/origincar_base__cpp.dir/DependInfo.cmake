@@ -15,7 +15,6 @@ set(CMAKE_MULTIPLE_OUTPUT_PAIRS
   "/userdata/dev_ws/build/origincar_base/rosidl_generator_cpp/origincar_base/msg/detail/position__builder.hpp" "/userdata/dev_ws/build/origincar_base/rosidl_generator_cpp/origincar_base/msg/position.hpp"
   "/userdata/dev_ws/build/origincar_base/rosidl_generator_cpp/origincar_base/msg/detail/position__struct.hpp" "/userdata/dev_ws/build/origincar_base/rosidl_generator_cpp/origincar_base/msg/position.hpp"
   "/userdata/dev_ws/build/origincar_base/rosidl_generator_cpp/origincar_base/msg/detail/position__traits.hpp" "/userdata/dev_ws/build/origincar_base/rosidl_generator_cpp/origincar_base/msg/position.hpp"
-  "/userdata/dev_ws/build/origincar_base/rosidl_generator_cpp/origincar_base/msg/detail/position__type_support.hpp" "/userdata/dev_ws/build/origincar_base/rosidl_generator_cpp/origincar_base/msg/position.hpp"
   )
 
 

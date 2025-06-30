@@ -3,7 +3,6 @@ file(REMOVE_RECURSE
   "rosidl_generator_cpp/origincar_base/msg/detail/position__builder.hpp"
   "rosidl_generator_cpp/origincar_base/msg/detail/position__struct.hpp"
   "rosidl_generator_cpp/origincar_base/msg/detail/position__traits.hpp"
-  "rosidl_generator_cpp/origincar_base/msg/detail/position__type_support.hpp"
   "rosidl_generator_cpp/origincar_base/msg/position.hpp"
 )
 

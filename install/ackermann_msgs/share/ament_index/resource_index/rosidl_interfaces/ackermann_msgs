@@ -1,1 +1,4 @@
-/userdata/dev_ws/build/ackermann_msgs/ament_cmake_index/share/ament_index/resource_index/rosidl_interfaces/ackermann_msgs
+msg/AckermannDrive.idl
+msg/AckermannDrive.msg
+msg/AckermannDriveStamped.idl
+msg/AckermannDriveStamped.msg

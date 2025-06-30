@@ -1,1 +1,3 @@
-/userdata/dev_ws/src/origincar/origincar_msg/msg/Data.msg
+float32 x
+float32 y
+float32 z

@@ -16,11 +16,9 @@ set(CMAKE_MULTIPLE_OUTPUT_PAIRS
   "/userdata/dev_ws/build/ackermann_msgs/rosidl_generator_cpp/ackermann_msgs/msg/detail/ackermann_drive__builder.hpp" "/userdata/dev_ws/build/ackermann_msgs/rosidl_generator_cpp/ackermann_msgs/msg/ackermann_drive.hpp"
   "/userdata/dev_ws/build/ackermann_msgs/rosidl_generator_cpp/ackermann_msgs/msg/detail/ackermann_drive__struct.hpp" "/userdata/dev_ws/build/ackermann_msgs/rosidl_generator_cpp/ackermann_msgs/msg/ackermann_drive.hpp"
   "/userdata/dev_ws/build/ackermann_msgs/rosidl_generator_cpp/ackermann_msgs/msg/detail/ackermann_drive__traits.hpp" "/userdata/dev_ws/build/ackermann_msgs/rosidl_generator_cpp/ackermann_msgs/msg/ackermann_drive.hpp"
-  "/userdata/dev_ws/build/ackermann_msgs/rosidl_generator_cpp/ackermann_msgs/msg/detail/ackermann_drive__type_support.hpp" "/userdata/dev_ws/build/ackermann_msgs/rosidl_generator_cpp/ackermann_msgs/msg/ackermann_drive.hpp"
   "/userdata/dev_ws/build/ackermann_msgs/rosidl_generator_cpp/ackermann_msgs/msg/detail/ackermann_drive_stamped__builder.hpp" "/userdata/dev_ws/build/ackermann_msgs/rosidl_generator_cpp/ackermann_msgs/msg/ackermann_drive.hpp"
   "/userdata/dev_ws/build/ackermann_msgs/rosidl_generator_cpp/ackermann_msgs/msg/detail/ackermann_drive_stamped__struct.hpp" "/userdata/dev_ws/build/ackermann_msgs/rosidl_generator_cpp/ackermann_msgs/msg/ackermann_drive.hpp"
   "/userdata/dev_ws/build/ackermann_msgs/rosidl_generator_cpp/ackermann_msgs/msg/detail/ackermann_drive_stamped__traits.hpp" "/userdata/dev_ws/build/ackermann_msgs/rosidl_generator_cpp/ackermann_msgs/msg/ackermann_drive.hpp"
-  "/userdata/dev_ws/build/ackermann_msgs/rosidl_generator_cpp/ackermann_msgs/msg/detail/ackermann_drive_stamped__type_support.hpp" "/userdata/dev_ws/build/ackermann_msgs/rosidl_generator_cpp/ackermann_msgs/msg/ackermann_drive.hpp"
   )
 
 

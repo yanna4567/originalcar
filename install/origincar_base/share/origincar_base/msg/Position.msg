@@ -1,1 +1,3 @@
-/userdata/dev_ws/src/origincar/origincar_base/msg/Position.msg
+float32 angle_x
+float32 angle_y
+float32 distance

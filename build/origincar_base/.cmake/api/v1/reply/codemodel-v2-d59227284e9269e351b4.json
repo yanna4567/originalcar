@@ -1,0 +1,242 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-54298fb126ddb09ad738.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						5,
+						6,
+						7,
+						8,
+						9,
+						10,
+						11,
+						12,
+						13,
+						14,
+						15,
+						16,
+						17,
+						18
+					]
+				},
+				{
+					"build" : "origincar_base__py",
+					"jsonFile" : "directory-origincar_base__py-4b60abde21a0ceba8643.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.12"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "/userdata/dev_ws/build/origincar_base/origincar_base__py",
+					"targetIndexes" : 
+					[
+						4
+					]
+				}
+			],
+			"name" : "",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0,
+						1
+					],
+					"name" : "origincar_base",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7,
+						8,
+						9,
+						10,
+						11,
+						12,
+						13,
+						14,
+						15,
+						16,
+						17,
+						18
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "ament_cmake_python_build_origincar_base_egg::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ament_cmake_python_build_origincar_base_egg-80a720bb5de0002a34ee.json",
+					"name" : "ament_cmake_python_build_origincar_base_egg",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "ament_cmake_python_copy_origincar_base::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-ament_cmake_python_copy_origincar_base-fc16b85e6531ca888228.json",
+					"name" : "ament_cmake_python_copy_origincar_base",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "origincar_base::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-origincar_base-d87929563f907532125b.json",
+					"name" : "origincar_base",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "origincar_base__cpp::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-origincar_base__cpp-3e87533c14079b7cde5d.json",
+					"name" : "origincar_base__cpp",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "origincar_base__py::@96023800eb56e953dbf6",
+					"jsonFile" : "target-origincar_base__py-1940eccc2216d7fd7c82.json",
+					"name" : "origincar_base__py",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "origincar_base__rosidl_generator_c::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-origincar_base__rosidl_generator_c-9a9b6f2fb2ad24205425.json",
+					"name" : "origincar_base__rosidl_generator_c",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "origincar_base__rosidl_generator_py::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-origincar_base__rosidl_generator_py-e3dff40c5ccd4968ae40.json",
+					"name" : "origincar_base__rosidl_generator_py",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "origincar_base__rosidl_typesupport_c::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-origincar_base__rosidl_typesupport_c-336f5f8a17aaf3d77a76.json",
+					"name" : "origincar_base__rosidl_typesupport_c",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "origincar_base__rosidl_typesupport_c__pyext::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-origincar_base__rosidl_typesupport_c__pyext-5bea5f31fb242fb902db.json",
+					"name" : "origincar_base__rosidl_typesupport_c__pyext",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "origincar_base__rosidl_typesupport_cpp::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-origincar_base__rosidl_typesupport_cpp-7aa51de6c55ba882b8c8.json",
+					"name" : "origincar_base__rosidl_typesupport_cpp",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "origincar_base__rosidl_typesupport_fastrtps_c::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-origincar_base__rosidl_typesupport_fastrtps_c-68209687e23862936276.json",
+					"name" : "origincar_base__rosidl_typesupport_fastrtps_c",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "origincar_base__rosidl_typesupport_fastrtps_c__pyext::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-origincar_base__rosidl_typesupport_fastrtps_c__pyext-949bffdda48b8c286b8e.json",
+					"name" : "origincar_base__rosidl_typesupport_fastrtps_c__pyext",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "origincar_base__rosidl_typesupport_fastrtps_cpp::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-origincar_base__rosidl_typesupport_fastrtps_cpp-1547ec5294566f9c4832.json",
+					"name" : "origincar_base__rosidl_typesupport_fastrtps_cpp",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "origincar_base__rosidl_typesupport_introspection_c::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-origincar_base__rosidl_typesupport_introspection_c-5e4da7dda1e89f5f87c5.json",
+					"name" : "origincar_base__rosidl_typesupport_introspection_c",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "origincar_base__rosidl_typesupport_introspection_c__pyext::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-origincar_base__rosidl_typesupport_introspection_c__pyext-724463b709f99a69bc16.json",
+					"name" : "origincar_base__rosidl_typesupport_introspection_c__pyext",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "origincar_base__rosidl_typesupport_introspection_cpp::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-origincar_base__rosidl_typesupport_introspection_cpp-5adcbe93cef30193ecd6.json",
+					"name" : "origincar_base__rosidl_typesupport_introspection_cpp",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "origincar_base_node::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-origincar_base_node-e32202a3ebe246b58620.json",
+					"name" : "origincar_base_node",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "origincar_base_uninstall::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-origincar_base_uninstall-6c2d1e3a95ee2f5df805.json",
+					"name" : "origincar_base_uninstall",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "uninstall::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-uninstall-737f6dd46a174eeb9013.json",
+					"name" : "uninstall",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/userdata/dev_ws/build/origincar_base",
+		"source" : "/userdata/dev_ws/src/origincar/origincar_base"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 3
+	}
+}

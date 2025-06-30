@@ -7,6 +7,5 @@
 #include "origincar_msg/msg/detail/sign__struct.hpp"
 #include "origincar_msg/msg/detail/sign__builder.hpp"
 #include "origincar_msg/msg/detail/sign__traits.hpp"
-#include "origincar_msg/msg/detail/sign__type_support.hpp"
 
 #endif  // ORIGINCAR_MSG__MSG__SIGN_HPP_

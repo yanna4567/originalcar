@@ -70,8 +70,6 @@ CMakeFiles/origincar_base__cpp: rosidl_generator_cpp/origincar_base/msg/position
 CMakeFiles/origincar_base__cpp: rosidl_generator_cpp/origincar_base/msg/detail/position__builder.hpp
 CMakeFiles/origincar_base__cpp: rosidl_generator_cpp/origincar_base/msg/detail/position__struct.hpp
 CMakeFiles/origincar_base__cpp: rosidl_generator_cpp/origincar_base/msg/detail/position__traits.hpp
-CMakeFiles/origincar_base__cpp: rosidl_generator_cpp/origincar_base/msg/detail/position__type_support.hpp
-CMakeFiles/origincar_base__cpp: rosidl_generator_cpp/origincar_base/msg/rosidl_generator_cpp__visibility_control.hpp
 
 rosidl_generator_cpp/origincar_base/msg/position.hpp: /opt/ros/humble/lib/rosidl_generator_cpp/rosidl_generator_cpp
 rosidl_generator_cpp/origincar_base/msg/position.hpp: /opt/ros/humble/local/lib/python3.10/dist-packages/rosidl_generator_cpp/__init__.py
@@ -101,14 +99,10 @@ rosidl_generator_cpp/origincar_base/msg/detail/position__struct.hpp: rosidl_gene
 rosidl_generator_cpp/origincar_base/msg/detail/position__traits.hpp: rosidl_generator_cpp/origincar_base/msg/position.hpp
 	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_generator_cpp/origincar_base/msg/detail/position__traits.hpp
 
-rosidl_generator_cpp/origincar_base/msg/detail/position__type_support.hpp: rosidl_generator_cpp/origincar_base/msg/position.hpp
-	@$(CMAKE_COMMAND) -E touch_nocreate rosidl_generator_cpp/origincar_base/msg/detail/position__type_support.hpp
-
 origincar_base__cpp: CMakeFiles/origincar_base__cpp
 origincar_base__cpp: rosidl_generator_cpp/origincar_base/msg/detail/position__builder.hpp
 origincar_base__cpp: rosidl_generator_cpp/origincar_base/msg/detail/position__struct.hpp
 origincar_base__cpp: rosidl_generator_cpp/origincar_base/msg/detail/position__traits.hpp
-origincar_base__cpp: rosidl_generator_cpp/origincar_base/msg/detail/position__type_support.hpp
 origincar_base__cpp: rosidl_generator_cpp/origincar_base/msg/position.hpp
 origincar_base__cpp: CMakeFiles/origincar_base__cpp.dir/build.make
 .PHONY : origincar_base__cpp

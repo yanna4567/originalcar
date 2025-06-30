@@ -1,1 +1,1 @@
-/userdata/dev_ws/build/utils/ament_cmake_index/share/ament_index/resource_index/package_run_dependencies/utils
+rclcpp;cv_bridge;sensor_msgs;hbm_img_msgs

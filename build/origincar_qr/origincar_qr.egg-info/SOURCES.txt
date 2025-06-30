@@ -1,0 +1,16 @@
+package.xml
+setup.cfg
+setup.py
+../../../build/origincar_qr/origincar_qr.egg-info/PKG-INFO
+../../../build/origincar_qr/origincar_qr.egg-info/SOURCES.txt
+../../../build/origincar_qr/origincar_qr.egg-info/dependency_links.txt
+../../../build/origincar_qr/origincar_qr.egg-info/entry_points.txt
+../../../build/origincar_qr/origincar_qr.egg-info/requires.txt
+../../../build/origincar_qr/origincar_qr.egg-info/top_level.txt
+../../../build/origincar_qr/origincar_qr.egg-info/zip-safe
+origincar_qr/__init__.py
+origincar_qr/li4.py
+resource/origincar_qr
+test/test_copyright.py
+test/test_flake8.py
+test/test_pep257.py

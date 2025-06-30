@@ -31,6 +31,7 @@ const int IMAGE_CENTER_X = IMAGE_WIDTH / 2;
 // 机器人行为状态枚举
 enum class RobotBehaviorState {
     LINE_FOLLOWING,                 // 巡线状态
+    LINE_RECOVERY_TURN,             // 巡线丢线恢复状态
     CONE_AVOIDANCE_ACTIVE,          // 正在主动避障状态
     POST_AVOIDANCE_SEARCH_FORWARD,  // 避障后，向前直线搜索线
     POST_AVOIDANCE_RECOVERY_TURN,   // 直线搜索失败后，根据上次避障方向进行反向恢复转向搜索
@@ -74,6 +75,11 @@ private:
     double post_avoidance_recovery_turn_duration_sec_;
     double recovery_turn_linear_speed_ratio_;
     double search_swing_frequency_; // 用于当last_avoidance_turn_direction_为NONE时的S型摆动
+
+    // 丢线恢复变量
+    rclcpp::Time last_line_detected_time_;
+    float last_valid_line_error_ = 0.0f;
+    bool is_first_line_lost_ = true;
 
     // 状态变量
     bool is_teleoperation_active_;
